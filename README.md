@@ -13,7 +13,7 @@
 
 ```bash
 # Clone the repository
-git clone <github.com/ravisharma79/Docker-Based_3-Tier_Application.git>
+git clone <https://github.com/ravisharma79/Docker-Based_3-Tier_Application.git>
 cd <Docker-Based_3-Tier_Application>
 
 # Create your .env file from the example
