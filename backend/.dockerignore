@@ -1,0 +1,15 @@
+# Ignore everything not needed in the backend image build context
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.env*
+.git
+.gitignore
+*.md
+venv/
+.venv/
+tests/
+.pytest_cache/

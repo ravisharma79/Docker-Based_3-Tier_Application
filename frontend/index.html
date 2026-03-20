@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FiftyFive Technologies — 3-Tier App</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; color: #63b3ed; }
+    p.sub { color: #a0aec0; margin-bottom: 2rem; font-size: 0.95rem; }
+    .cards { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+    .card {
+      background: #1a1d27;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      min-width: 220px;
+      text-align: center;
+    }
+    .card h2 { font-size: 1rem; color: #90cdf4; margin-bottom: 1rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .ok   { background: #22543d; color: #9ae6b4; }
+    .err  { background: #742a2a; color: #fc8181; }
+    .wait { background: #2d3748; color: #a0aec0; }
+    button {
+      margin-top: 2rem;
+      padding: 0.6rem 1.8rem;
+      border: none;
+      border-radius: 8px;
+      background: #3182ce;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #2b6cb0; }
+    pre {
+      margin-top: 2rem;
+      background: #1a1d27;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      font-size: 0.85rem;
+      color: #68d391;
+      max-width: 560px;
+      width: 100%;
+      text-align: left;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐳 3-Tier Docker App</h1>
+  <p class="sub">FiftyFive Technologies · DevOps Intern Assessment</p>
+
+  <div class="cards">
+    <div class="card">
+      <h2>🌐 Frontend (Nginx)</h2>
+      <span class="badge ok">Running</span>
+    </div>
+    <div class="card">
+      <h2>⚙️ Backend (Python)</h2>
+      <span id="api-status" class="badge wait">Checking…</span>
+    </div>
+    <div class="card">
+      <h2>🗄️ Database (MySQL)</h2>
+      <span id="db-status" class="badge wait">Checking…</span>
+    </div>
+  </div>
+
+  <button onclick="checkHealth()">🔄 Refresh Health</button>
+  <pre id="output">Fetching status…</pre>
+
+  <script>
+    async function checkHealth() {
+      const out = document.getElementById('output');
+      const apiEl = document.getElementById('api-status');
+      const dbEl  = document.getElementById('db-status');
+      out.textContent = 'Fetching…';
+      try {
+        const res  = await fetch('/api/health');
+        const data = await res.json();
+        out.textContent = JSON.stringify(data, null, 2);
+        apiEl.textContent = 'Running';
+        apiEl.className   = 'badge ok';
+        dbEl.textContent  = data.database === 'ok' ? 'Connected' : 'Unavailable';
+        dbEl.className    = data.database === 'ok' ? 'badge ok' : 'badge err';
+      } catch (e) {
+        out.textContent  = 'Error: ' + e.message;
+        apiEl.textContent = 'Unreachable';
+        apiEl.className   = 'badge err';
+        dbEl.textContent  = 'Unknown';
+        dbEl.className    = 'badge err';
+      }
+    }
+    checkHealth();
+  </script>
+</body>
+</html>

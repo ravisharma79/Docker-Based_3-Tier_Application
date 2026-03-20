@@ -1,0 +1,5 @@
+# Ignore everything not needed in the frontend image
+.git
+.gitignore
+.env*
+*.md
